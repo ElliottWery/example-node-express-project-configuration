@@ -12,12 +12,19 @@ const sayHello = (req, res) => {
 
   const saySomething = (req, res) => {
     const greeting = req.params.greeting;
-    const content = `${greeting}!`;
+    const name = req.query.name;
+  
+    const content = greeting && name ? `${greeting}, ${name}!` : `${greeting}!`;
     res.send(content);
   };
-  
+
+  app.use((err, req, res, next) => {
+    console.error(err);
+    res.send(err);
+  });
+
+app.get("/hello", sayHello);
 app.get("/say/:greeting", saySomething);
 app.use(morgan("dev"));
-app.get("/hello", sayHello);
 
 module.exports = app;
